@@ -1,0 +1,127 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<workshop.Models.Article>
+@*@model IEnumerable<workshop.Models.Article>*@
+
+@{
+    ViewBag.Title = "Backend - Index";
+    Layout = "~/Areas/Backend/Views/Shared/_Layout.cshtml";
+}
+@helper SortIndicator(string name)
+{
+    if (ViewContext.ViewData.ModelState["Column"].Value.AttemptedValue == name)
+    {
+        if (ViewContext.ViewData.ModelState["Sort"].Value.AttemptedValue == "Descending")
+        {
+            <i class="glyphicon glyphicon-chevron-down"></i>
+        }
+        else
+        {
+            <i class="glyphicon glyphicon-chevron-up"></i>
+        }
+    }
+}
+<h2>Article - Index</h2>
+
+<div class="paging">
+    <p>
+        @using (Html.BeginForm("Index", "Article", FormMethod.Get, new { @class = "form-inline form-search" }))
+        {
+            @Html.TextBox("Keyword", null, new { @class = "form-control" })
+            @Html.Hidden("Column")
+            @Html.Hidden("Sort")
+            <input type="submit" class="btn btn-primary" value="查詢" />
+
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+        }
+    </p>
+    <table class="table">
+        <tr>
+            <th class="sortable" data-column="@Html.NameFor(model => model.First().Subject)">
+                @Html.DisplayNameFor(model => model.First().Subject)
+                @SortIndicator("Subject")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Summary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ContentText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().IsPublish)
+            </th>
+            <th class="sortable" data-column="@Html.NameFor(model => model.First().PublishDate)">
+                @Html.DisplayNameFor(model => model.First().PublishDate)
+                @SortIndicator("PublishDate")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ViewCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().CreateUser)
+            </th>
+            <th class="sortable" data-column="@Html.NameFor(model => model.First().CreateDate)">
+                @Html.DisplayNameFor(model => model.First().CreateDate)
+                @SortIndicator("CreateDate")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UpdateUser)
+            </th>
+            <th class="sortable" data-column="@Html.NameFor(model => model.First().UpdateDate)">
+                @Html.DisplayNameFor(model => model.First().UpdateDate)
+                @SortIndicator("UpdateDate")
+            </th>
+            <th class="sortable" data-column="@Html.NameFor(model => model.First().Category.Name)">
+                @Html.DisplayNameFor(model => model.First().Category.Name)
+                @SortIndicator("Category.Name")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Summary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContentText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPublish)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishDate, "PromptDateTime")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ViewCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateUser)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdateUser)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

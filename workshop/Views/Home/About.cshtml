@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+@{
+    //int a = 123;
+    //string b = "<strong>test</strong>";
+    var collection = new string[] {"a","b"};
+}
+@*<p>@(string.Format("{0}  {1}",a,b))</p>*@
+@*<p>@Html.Raw(b)</p>*@
+
+@foreach (var item in collection)
+{
+    <span>@item</span>
+}
+
